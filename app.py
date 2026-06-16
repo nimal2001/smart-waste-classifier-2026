@@ -38,22 +38,19 @@ if uploaded_file is not None:
     st.write("Processing...")
 
     # --- 5. PREPROCESS IMAGE ---
-    # Convert PIL image to RGB (in case of PNG with transparency)
     image = image.convert('RGB')
-    # Resize to match MobileNetV2 input size
     image = image.resize((224, 224))
     img_array = tf.keras.preprocessing.image.img_to_array(image)
-    img_array = np.expand_dims(img_array, axis=0) # Create a batch of 1
+    img_array = np.expand_dims(img_array, axis=0) 
     
-    # Apply MobileNetV2 specific preprocessing
     img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)
 
     # --- 6. PREDICTION (Requirement 3) ---
     predictions = model.predict(img_array)[0]
     
-    # Get the index of the highest probability
     predicted_class_index = np.argmax(predictions)
-    predicted_class_name = class_mapping[str(predicted_class_index)]
+    # Using the safer .get() method we added earlier
+    predicted_class_name = class_mapping.get(str(predicted_class_index), f"Unknown_ID_{predicted_class_index}")
     confidence = predictions[predicted_class_index] * 100
 
     # --- 7. DISPLAY PREDICTION & CONFIDENCE (Requirement 4) ---
@@ -64,14 +61,13 @@ if uploaded_file is not None:
     st.write("### Probability Breakdown")
     
     # Create a visual bar chart of all probabilities
-   # Safer mapping that prevents KeyErrors by providing a fallback name
-prob_dict = {class_mapping.get(str(i), f"Unknown_ID_{i}"): float(prob) * 100 for i, prob in enumerate(predictions)}
+    prob_dict = {class_mapping.get(str(i), f"Unknown_ID_{i}"): float(prob) * 100 for i, prob in enumerate(predictions)}
     
     # Sort the dictionary by probability for better visualization
-sorted_probs = dict(sorted(prob_dict.items(), key=lambda item: item[1], reverse=True))
+    sorted_probs = dict(sorted(prob_dict.items(), key=lambda item: item[1], reverse=True))
     
     # Display as progress bars
-for class_name, prob in sorted_probs.items():
+    for class_name, prob in sorted_probs.items():
         cols = st.columns([2, 8, 2])
         with cols[0]:
             st.write(class_name)
