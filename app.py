@@ -68,7 +68,7 @@ if uploaded_file is not None:
 prob_dict = {class_mapping.get(str(i), f"Unknown_ID_{i}"): float(prob) * 100 for i, prob in enumerate(predictions)}
     
     # Sort the dictionary by probability for better visualization
-    sorted_probs = dict(sorted(prob_dict.items(), key=lambda item: item[1], reverse=True))
+sorted_probs = dict(sorted(prob_dict.items(), key=lambda item: item[1], reverse=True))
     
     # Display as progress bars
     for class_name, prob in sorted_probs.items():
