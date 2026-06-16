@@ -64,7 +64,8 @@ if uploaded_file is not None:
     st.write("### Probability Breakdown")
     
     # Create a visual bar chart of all probabilities
-    prob_dict = {class_mapping[str(i)]: float(prob) * 100 for i, prob in enumerate(predictions)}
+   # Safer mapping that prevents KeyErrors by providing a fallback name
+prob_dict = {class_mapping.get(str(i), f"Unknown_ID_{i}"): float(prob) * 100 for i, prob in enumerate(predictions)}
     
     # Sort the dictionary by probability for better visualization
     sorted_probs = dict(sorted(prob_dict.items(), key=lambda item: item[1], reverse=True))
