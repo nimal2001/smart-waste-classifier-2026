@@ -71,7 +71,7 @@ prob_dict = {class_mapping.get(str(i), f"Unknown_ID_{i}"): float(prob) * 100 for
 sorted_probs = dict(sorted(prob_dict.items(), key=lambda item: item[1], reverse=True))
     
     # Display as progress bars
-    for class_name, prob in sorted_probs.items():
+for class_name, prob in sorted_probs.items():
         cols = st.columns([2, 8, 2])
         with cols[0]:
             st.write(class_name)
